@@ -1,0 +1,19 @@
+{
+  "name": "universalevents",
+  "version": "0.0.2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robbie-c/universalevents"
+  },
+  "main": "src/UniversalEvents.js",
+  "dependencies": {
+    "async": "^1.4.2",
+    "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "expect.js": "^0.3.1",
+    "mocha": "^2.3.3"
+  }
+}
