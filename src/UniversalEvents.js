@@ -1,18 +1,14 @@
 'use strict';
 
-var Q = require('q');
-
 var shimSetImmediate;
 if (typeof setImmediate === 'function') {
     shimSetImmediate = function (f) {
         return setImmediate(f);
-    }
-} else if (typeof process !== 'undefined' && typeof process.nextTick === 'function') {
-    shimSetImmediate = process.nextTick
+    };
 } else {
     shimSetImmediate = function(f) {
         return setTimeout(f, 0);
-    }
+    };
 }
 
 export default class UniversalEvents {
@@ -103,25 +99,24 @@ export default class UniversalEvents {
             }
         }
 
-        var defer = Q.defer();
+        return new Promise(
+            function(resolve, reject) {
+                function successHandler(val) {
+                    self.removeEventListener(successEventName, successHandler);
+                    self.removeEventListener(failureEventName, failureHandler);
 
-        function successHandler(val) {
-            self.removeEventListener(successEventName, successHandler);
-            self.removeEventListener(failureEventName, failureHandler);
+                    resolve(val);
+                }
 
-            defer.resolve(val);
-        }
+                function failureHandler(err) {
+                    self.removeEventListener(successEventName, successHandler);
+                    self.removeEventListener(failureEventName, failureHandler);
 
-        function failureHandler(err) {
-            self.removeEventListener(successEventName, successHandler);
-            self.removeEventListener(failureEventName, failureHandler);
+                    reject(err);
+                }
 
-            defer.reject(err);
-        }
-
-        this.addEventListener(successEventName, successHandler);
-        this.addEventListener(failureEventName, failureHandler);
-
-        return defer.promise;
+                self.addEventListener(successEventName, successHandler);
+                self.addEventListener(failureEventName, failureHandler);
+            });
     }
 }

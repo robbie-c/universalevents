@@ -10,9 +10,7 @@
   "scripts": {
     "prepublish": "gulp javascript"
   },
-  "dependencies": {
-    "q": "^1.4.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel": "^5.8.23",
     "babelify": "^6.3.0",
