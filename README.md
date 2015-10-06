@@ -5,7 +5,7 @@ Event emitter for node and browser, based on EventEmitter but with extra feature
 
 ```JavaScript
 import UniversalEvents from 'UniversalEvents';
-var ue = UniversalEvents();
+var ue = new UniversalEvents();
 
 // attach a function that is called when the matching event happens
 ue.on('myEventName', function (data) {
