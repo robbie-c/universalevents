@@ -1,7 +1,19 @@
 'use strict';
 
-var async = require('async');
 var Q = require('q');
+
+var shimSetImmediate;
+if (typeof setImmediate === 'function') {
+    shimSetImmediate = function (f) {
+        return setImmediate(f);
+    }
+} else if (typeof process !== 'undefined' && typeof process.nextTick === 'function') {
+    shimSetImmediate = process.nextTick
+} else {
+    shimSetImmediate = function(f) {
+        return setTimeout(f, 0);
+    }
+}
 
 export default class UniversalEvents {
 
@@ -65,7 +77,7 @@ export default class UniversalEvents {
                     boundHandler.apply(this, [boundData]);
                 }.bind(undefined, handler, data);
 
-                async.setImmediate(runHandler);
+                shimSetImmediate(runHandler);
             }
             return true;
         }
