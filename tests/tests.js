@@ -19,22 +19,22 @@ describe('UniversalEvents', function () {
         });
     });
 
-    describe('#addEventListener', function () {
+    describe('#on', function () {
         it('should allow known events', function () {
             var el = new UniversalEvents(['eventName']);
-            el.addEventListener('eventName', function () {
+            el.on('eventName', function () {
             });
         });
         it('should reject unknown events', function () {
             var el = new UniversalEvents(['eventName']);
             expect(function () {
-                el.addEventListener('invalidEventName', function () {
+                el.on('invalidEventName', function () {
                 });
             }).to.throwError();
         });
         it('should allow any event when not given any event names in the ctor', function () {
             var el = new UniversalEvents();
-            el.addEventListener('invalidEventName', function () {
+            el.on('invalidEventName', function () {
             });
         });
     });
@@ -42,17 +42,17 @@ describe('UniversalEvents', function () {
     describe('#raiseEvent', function () {
         it('should allow known events when there is no handler', function () {
             var el = new UniversalEvents(['eventName']);
-            el.raiseEvent('eventName');
+            expect(el.emit('eventName')).to.be(false);
         });
 
         it('should allow known events when there is a handler', function (done) {
             var el = new UniversalEvents(['eventName']);
             var data = {a: 1};
-            el.addEventListener('eventName', function (eventData) {
+            el.on('eventName', function (eventData) {
                 expect(eventData).to.be(data);
                 done();
             });
-            el.raiseEvent('eventName', data);
+            expect(el.emit('eventName', data)).to.be(true);
         });
 
         it('should allow known events when there are multiple handlers and call all of them', function (done) {
@@ -62,7 +62,7 @@ describe('UniversalEvents', function () {
 
             var el = new UniversalEvents(['eventName']);
 
-            el.addEventListener('eventName', function (eventData) {
+            el.on('eventName', function (eventData) {
                 expect(eventData).to.be(data);
 
                 doneFirst = true;
@@ -70,9 +70,7 @@ describe('UniversalEvents', function () {
                 if (doneFirst && doneSecond) {
                     done();
                 }
-            });
-
-            el.addEventListener('eventName', function (eventData) {
+            }).on('eventName', function (eventData) {
                 expect(eventData).to.be(data);
 
                 doneSecond = true;
@@ -82,32 +80,32 @@ describe('UniversalEvents', function () {
                 }
             });
 
-            el.raiseEvent('eventName', data);
+            el.emit('eventName', data);
         });
 
         it('should not call handlers for other events', function () {
             var el = new UniversalEvents(['eventName', 'otherEventName']);
-            el.addEventListener('otherEventName', function () {
+            el.on('otherEventName', function () {
                 throw new Error();
             });
-            el.raiseEvent('eventName');
+            el.emit('eventName');
         });
 
         it('should reject unknown events', function () {
             var el = new UniversalEvents(['eventName']);
             expect(function () {
-                el.raiseEvent('invalidEventName');
+                el.emit('invalidEventName');
             }).to.throwError();
         });
 
         it('should allow any event when not given any event names in the ctor', function () {
             var el = new UniversalEvents();
             var data = {a: 1};
-            el.addEventListener('eventName', function (eventData) {
+            el.on('eventName', function (eventData) {
                 expect(eventData).to.be(data);
                 done();
             });
-            el.raiseEvent('eventName', data);
+            el.emit('eventName', data);
         });
     });
 
@@ -123,7 +121,7 @@ describe('UniversalEvents', function () {
                 })
                 .catch(done);
 
-            el.raiseEvent('eventNameSuccess', data);
+            el.emit('eventNameSuccess', data);
         });
 
         it('should reject the promise when the failure event happens', function (done) {
@@ -140,7 +138,7 @@ describe('UniversalEvents', function () {
                 })
                 .catch(done);
 
-            el.raiseEvent('eventNameFailure', error);
+            el.emit('eventNameFailure', error);
         });
 
         it('should fail if the success event name is invalid', function () {
