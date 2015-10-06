@@ -27,6 +27,8 @@ export default class UniversalEvents {
         }
 
         this._eventListeners[eventName].push(handler);
+
+        return this;
     }
 
     on(eventName, handler) {
