@@ -39,6 +39,24 @@ describe('UniversalEvents', function () {
         });
     });
 
+    describe('#once', function () {
+        it('should only be called once', function () {
+            var el = new UniversalEvents(['eventName']);
+
+            var alreadyCalled = false;
+            var data = {a: 1};
+
+            el.once('eventName', function (eventData) {
+                expect(eventData).to.be(data);
+                expect(alreadyCalled).to.be(false);
+                alreadyCalled = true;
+            });
+
+            expect(el.emit('eventName', data)).to.be(true);
+            expect(el.emit('eventName', data)).to.be(false);
+        });
+    });
+
     describe('#raiseEvent', function () {
         it('should allow known events when there is no handler', function () {
             var el = new UniversalEvents(['eventName']);
@@ -160,6 +178,26 @@ describe('UniversalEvents', function () {
             expect(function () {
                 el.await('eventNameSuccess', 'eventNameSuccess');
             }).to.throwError();
+        });
+    });
+
+    describe('#cbOnce', function () {
+        it('should only be called once', function () {
+            var el = new UniversalEvents(['eventNameSuccess', 'eventNameFailure']);
+
+            var alreadyCalled = false;
+            var data = {a: 1};
+
+            el.cbOnce('eventNameSuccess', 'eventNameFailure', function (eventError, eventData) {
+                expect(eventError).to.be(null);
+                expect(eventData).to.be(data);
+                expect(alreadyCalled).to.be(false);
+                alreadyCalled = true;
+            });
+
+            expect(el.emit('eventNameSuccess', data)).to.be(true);
+            expect(el.emit('eventNameSuccess', data)).to.be(false);
+            expect(el.emit('eventNameFailure', data)).to.be(false);
         });
     });
 });

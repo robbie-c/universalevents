@@ -74,6 +74,26 @@ export default class UniversalEvents {
     }
 
     /**
+     * Listen for an event. Remove listener after the first time it happens.
+     *
+     * @param {string} eventName - The name of the event to listen for
+     * @param {function(data: Object)} handler - The function which is called when the event is raised
+     * @return {UniversalEvents} - Returns the UniversalEvents object, allowing calls to be chained
+     */
+    once(eventName, handler) {
+        this._checkEventName(eventName);
+
+        var self = this;
+
+        function innerHandler(data) {
+            self.removeEventListener(eventName, innerHandler);
+
+            return handler(data);
+        }
+        return this.addEventListener(eventName, innerHandler);
+    }
+
+    /**
      * Remove a listener for an event. Be careful when doing this, you should only really remove listeners that were added by you.
      *
      * @param {string} eventName - The name of the event the handler was attached to
@@ -164,5 +184,42 @@ export default class UniversalEvents {
                 self.addEventListener(successEventName, successHandler);
                 self.addEventListener(failureEventName, failureHandler);
             });
+    }
+
+    /**
+     * Listen for a success event and failure event. Uses a node-like callback. Remove listeners after the callback is called
+     *
+     * @param {string} successEventName - The name of the success event to listen for
+     * @param {string} failureEventName - The name of the failure event to listen for
+     * @param {function(err: Error, data: Object)} callback - The node-like callback function which is called when either event is raised
+     * @return {UniversalEvents} - Returns the UniversalEvents object, allowing calls to be chained
+     */
+    cbOnce(successEventName, failureEventName, callback) {
+        var self = this;
+
+        this._checkEventName(successEventName);
+        this._checkEventName(failureEventName);
+        if (successEventName === failureEventName) {
+            throw new Error('Identical event name for success and failure: ' + failureEventName)
+        }
+
+        function successHandler(val) {
+            self.removeEventListener(successEventName, successHandler);
+            self.removeEventListener(failureEventName, failureHandler);
+
+            callback(null, val);
+        }
+
+        function failureHandler(err) {
+            self.removeEventListener(successEventName, successHandler);
+            self.removeEventListener(failureEventName, failureHandler);
+
+            callback(err, undefined);
+        }
+
+        self.addEventListener(successEventName, successHandler);
+        self.addEventListener(failureEventName, failureHandler);
+
+        return this;
     }
 }
