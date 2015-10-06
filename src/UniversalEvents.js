@@ -31,6 +31,18 @@ export default class UniversalEvents {
         this._eventListeners = {};
     }
 
+    _checkEventName(eventName) {
+        if (!eventName) {
+            throw new Error('Event name unspecified');
+        }
+        if (typeof eventName !== 'string') {
+            throw new Error('Event name must be string: ' + eventName);
+        }
+        if (this._validEvents && !this._validEvents.has(eventName)) {
+            throw new Error('Unknown event name: ' + eventName)
+        }
+    }
+
     /**
      * Listen for an event. Alias for {@link UniversalEvents#on}
      *
@@ -39,9 +51,7 @@ export default class UniversalEvents {
      * @return {UniversalEvents} - Returns the UniversalEvents object, allowing calls to be chained
      */
     addEventListener(eventName, handler) {
-        if (this._validEvents && !this._validEvents.has(eventName)) {
-            throw new Error('Unknown event name: ' + eventName)
-        }
+        this._checkEventName(eventName);
 
         if (!this._eventListeners[eventName]) {
             this._eventListeners[eventName] = [];
@@ -71,9 +81,7 @@ export default class UniversalEvents {
      * @return {UniversalEvents} - Returns the UniversalEvents object, allowing calls to be chained
      */
     removeEventListener(eventName, handler) {
-        if (this._validEvents && !this._validEvents.has(eventName)) {
-            throw new Error('Unknown event name: ' + eventName)
-        }
+        this._checkEventName(eventName);
 
         var handlers = this._eventListeners[eventName];
 
@@ -95,13 +103,11 @@ export default class UniversalEvents {
      * @return {boolean} - A boolean representing whether the event had any handlers
      */
     raiseEvent(eventName, data) {
-        if (this._validEvents && !this._validEvents.has(eventName)) {
-            throw new Error('Unknown event name: ' + eventName)
-        }
+        this._checkEventName(eventName);
 
         var handlers = this._eventListeners[eventName];
 
-        if (handlers) {
+        if (handlers && handlers.length > 0) {
             for (var i = 0; i < handlers.length; i++) {
                 // run the code right now, if the user wants it run on next tick that is up to them
                 handlers[i].apply(this, [data]);
@@ -133,16 +139,10 @@ export default class UniversalEvents {
     await(successEventName, failureEventName) {
         var self = this;
 
-        if (this._validEvents) {
-            if (!this._validEvents.has(successEventName)) {
-                throw new Error('Unknown event name: ' + successEventName)
-            }
-            if (!this._validEvents.has(failureEventName)) {
-                throw new Error('Unknown event name: ' + failureEventName)
-            }
-            if (successEventName === failureEventName) {
-                throw new Error('Identical event name for success and failure: ' + failureEventName)
-            }
+        this._checkEventName(successEventName);
+        this._checkEventName(failureEventName);
+        if (successEventName === failureEventName) {
+            throw new Error('Identical event name for success and failure: ' + failureEventName)
         }
 
         return new Promise(
