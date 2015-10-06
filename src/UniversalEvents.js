@@ -1,16 +1,5 @@
 'use strict';
 
-var _shimSetImmediate;
-if (typeof setImmediate === 'function') {
-    _shimSetImmediate = function (f) {
-        return setImmediate(f);
-    };
-} else {
-    _shimSetImmediate = function(f) {
-        return setTimeout(f, 0);
-    };
-}
-
 /**
  * UniversalEvents is a class for managing events
  *
@@ -113,13 +102,8 @@ export default class UniversalEvents {
 
         if (handlers) {
             for (var i = 0; i < handlers.length; i++) {
-                var handler = handlers[i];
-
-                var runHandler = function (boundHandler, boundData) {
-                    boundHandler.apply(this, [boundData]);
-                }.bind(undefined, handler, data);
-
-                _shimSetImmediate(runHandler);
+                // run the code right now, if the user wants it run on next tick that is up to them
+                handlers[i].apply(this, [data]);
             }
             return true;
         }
