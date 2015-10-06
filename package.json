@@ -8,13 +8,14 @@
   },
   "main": "src/UniversalEvents.js",
   "scripts": {
-    "prepublish": "gulp javascript"
+    "prepublish": "mocha && gulp javascript && esdoc -c esdoc.json"
   },
   "dependencies": {},
   "devDependencies": {
     "babel": "^5.8.23",
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
+    "esdoc": "^0.4.0",
     "expect.js": "^0.3.1",
     "gulp": "^3.9.0",
     "gulp-sourcemaps": "^1.6.0",
