@@ -65,7 +65,9 @@ export default class UniversalEvents {
 
                 async.setImmediate(runHandler);
             }
+            return true;
         }
+        return false;
     }
 
     await(successEventName, failureEventName) {
