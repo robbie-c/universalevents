@@ -98,7 +98,7 @@ describe('UniversalEvents', function () {
             }).to.throwError();
         });
 
-        it('should allow any event when not given any event names in the ctor', function () {
+        it('should allow any event when not given any event names in the ctor', function (done) {
             var el = new UniversalEvents();
             var data = {a: 1};
             el.on('eventName', function (eventData) {
