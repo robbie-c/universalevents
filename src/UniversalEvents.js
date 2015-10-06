@@ -72,6 +72,10 @@ export default class UniversalEvents {
         return false;
     }
 
+    emit(eventName, data) {
+        return this.raiseEvent(eventName, data);
+    }
+
     await(successEventName, failureEventName) {
         var self = this;
 
