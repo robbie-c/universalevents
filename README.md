@@ -22,7 +22,7 @@ ue.await('successEventName', 'failureEventName')
 ue.raiseEvent('successEventName', 5); // logs "Succeeded with: 5"
 ue.await('successEventName', 'failureEventName')
     .catch(function (err) {
-        console.log('Failed with: ' + data);
+        console.log('Failed with: ' + err);
     });
 ue.raiseEvent('failureEventName', new Error("fail")); // logs "Failed with: Error: fail"
 ```
