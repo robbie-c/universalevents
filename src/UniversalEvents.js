@@ -86,7 +86,8 @@ export default class UniversalEvents {
     }
 
     /**
-     * Raise an event. Causes all listeners of this event to run.
+     * Raise an event. Causes all listeners of this event to run. Handlers are run before this function returns.
+     *
      * Alias of {@link UniversalEvents#emit}
      *
      * @param {string} eventName - The name of the event to raise
@@ -111,7 +112,7 @@ export default class UniversalEvents {
     }
 
     /**
-     * Raise an event. Causes all listeners of this event to run.
+     * Raise an event. Causes all listeners of this event to run. Handlers are run before this function returns.
      * Alias of {@link UniversalEvents#raiseEvent}
      *
      * @param {string} eventName - The name of the event to raise
