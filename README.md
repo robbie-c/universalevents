@@ -1,6 +1,8 @@
 # Universal Events
 Event emitter for node and browser, based on EventEmitter but with extra features
 
+See documentation at https://doc.esdoc.org/github.com/robbie-c/universalevents/
+
 # Usage Example
 
 ```JavaScript
