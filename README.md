@@ -1,2 +1,27 @@
 # Universal Events
 Event emitter for node and browser, based on EventEmitter but with extra features
+
+# Usage Example
+
+```JavaScript
+import UniversalEvents from 'UniversalEvents';
+var ue = UniversalEvents();
+
+// attach a function that is called when the matching event happens
+ue.on('myEventName', function (data) {
+    console.log('The data is: ' + data);
+});
+ue.raiseEvent('myEventName', 3); // logs "The data is: 3"
+ue.raiseEvent('myEventName', 'hello') // logs "The data is: hello"
+
+// create a Promise that is resolved on success and rejected on failure
+ue.await('successEventName', 'failureEventName')
+    .then(function (data) {
+        console.log('Succeeded with: ' + data);
+    })
+    .catch(function (err) {
+        console.log('Failed with: ' + data);
+    });
+ue.raiseEvent('successEventName', 5); // logs "Succeeded with: 5"
+ue.raiseEvent('failureEventName', new Error("fail")); // logs "Failed with: Error: fail"
+```
