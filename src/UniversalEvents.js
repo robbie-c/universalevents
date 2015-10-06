@@ -46,6 +46,8 @@ export default class UniversalEvents {
             var index = handlers.indexOf(handler);
             handlers.splice(index, 1);
         }
+
+        return this;
     }
 
     raiseEvent(eventName, data) {
