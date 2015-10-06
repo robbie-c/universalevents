@@ -19,9 +19,10 @@ ue.await('successEventName', 'failureEventName')
     .then(function (data) {
         console.log('Succeeded with: ' + data);
     })
+ue.raiseEvent('successEventName', 5); // logs "Succeeded with: 5"
+ue.await('successEventName', 'failureEventName')
     .catch(function (err) {
         console.log('Failed with: ' + data);
     });
-ue.raiseEvent('successEventName', 5); // logs "Succeeded with: 5"
 ue.raiseEvent('failureEventName', new Error("fail")); // logs "Failed with: Error: fail"
 ```
