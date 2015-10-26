@@ -8,7 +8,7 @@
   },
   "main": "src/UniversalEvents.js",
   "scripts": {
-    "prepublish": "mocha && gulp javascript && esdoc -c esdoc.json"
+    "prepublish": "eslint src && mocha && gulp javascript && esdoc -c esdoc.json"
   },
   "dependencies": {},
   "devDependencies": {

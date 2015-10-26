@@ -186,12 +186,12 @@ describe('UniversalEvents', function () {
             var p1 = el.await('eventNameSuccess', 'eventNameFailure');
             var p2 = el.await('eventNameSuccess', 'eventNameFailure');
 
-            Promise.all([p1, p2]).then(function() {
+            Promise.all([p1, p2]).then(function () {
                 console.log('done');
                 done();
             });
 
-            setImmediate(function() {
+            setImmediate(function () {
                 el.raiseEvent('eventNameSuccess');
             })
         });
@@ -221,10 +221,17 @@ describe('UniversalEvents', function () {
         it('should only remove the one that was intended to be remove', function () {
             var el = new UniversalEvents();
 
-            function f1 () {}
-            function f2 () {}
-            function f3 () {}
-            function f4 () {}
+            function f1() {
+            }
+
+            function f2() {
+            }
+
+            function f3() {
+            }
+
+            function f4() {
+            }
 
             el.addEventListener('eventName', f1);
             el.addEventListener('eventName', f2);

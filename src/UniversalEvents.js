@@ -94,6 +94,7 @@ export default class UniversalEvents {
 
             return handler(data);
         }
+
         return this.addEventListener(eventName, innerHandler);
     }
 
@@ -176,7 +177,7 @@ export default class UniversalEvents {
         }
 
         return new Promise(
-            function(resolve, reject) {
+            function (resolve, reject) {
                 function successHandler(val) {
                     self.removeEventListener(successEventName, successHandler);
                     self.removeEventListener(failureEventName, failureHandler);
