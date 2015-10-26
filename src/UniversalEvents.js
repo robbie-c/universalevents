@@ -132,6 +132,12 @@ export default class UniversalEvents {
         var handlers = this._eventListeners[eventName];
 
         if (handlers && handlers.length > 0) {
+
+            // create a local copy of the handlers array
+            // this protects us against handlers that modify the handlers
+            // (e.g. remove themself)
+            handlers = handlers.slice();
+
             for (var i = 0; i < handlers.length; i++) {
                 // run the code right now, if the user wants it run on next tick that is up to them
                 handlers[i].apply(this, [data]);

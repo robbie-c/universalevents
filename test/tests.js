@@ -179,6 +179,22 @@ describe('UniversalEvents', function () {
                 el.await('eventNameSuccess', 'eventNameSuccess');
             }).to.throwError();
         });
+
+        it('should allow multiple promises for the same events', function (done) {
+            var el = new UniversalEvents(['eventNameSuccess', 'eventNameFailure']);
+
+            var p1 = el.await('eventNameSuccess', 'eventNameFailure');
+            var p2 = el.await('eventNameSuccess', 'eventNameFailure');
+
+            Promise.all([p1, p2]).then(function() {
+                console.log('done');
+                done();
+            });
+
+            setImmediate(function() {
+                el.raiseEvent('eventNameSuccess');
+            })
+        });
     });
 
     describe('#cbOnce', function () {
