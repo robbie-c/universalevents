@@ -200,4 +200,46 @@ describe('UniversalEvents', function () {
             expect(el.emit('eventNameFailure', data)).to.be(false);
         });
     });
+
+    describe('#removeEventListener', function (done) {
+        it('should only remove the one that was intended to be remove', function () {
+            var el = new UniversalEvents();
+
+            function f1 () {}
+            function f2 () {}
+            function f3 () {}
+            function f4 () {}
+
+            el.addEventListener('eventName', f1);
+            el.addEventListener('eventName', f2);
+            el.addEventListener('eventName', f3);
+            el.addEventListener('eventName', f4);
+
+            expect(el._getListenersForEvent('eventName').length).to.be(4);
+
+            el.removeEventListener('eventName', f1);
+
+            var listeners = el._getListenersForEvent('eventName');
+            expect(listeners.length).to.be(3);
+            expect(listeners.indexOf(f1)).to.be(-1);
+            expect(listeners.indexOf(f2)).to.not.be(-1);
+            expect(listeners.indexOf(f3)).to.not.be(-1);
+            expect(listeners.indexOf(f4)).to.not.be(-1);
+
+            el.removeEventListener('eventName', f3);
+
+            listeners = el._getListenersForEvent('eventName');
+            expect(listeners.length).to.be(2);
+            expect(listeners.indexOf(f2)).to.not.be(-1);
+            expect(listeners.indexOf(f3)).to.be(-1);
+            expect(listeners.indexOf(f4)).to.not.be(-1);
+
+            el.removeEventListener('eventName', f4);
+
+            listeners = el._getListenersForEvent('eventName');
+            expect(listeners.length).to.be(1);
+            expect(listeners.indexOf(f2)).to.not.be(-1);
+            expect(listeners.indexOf(f4)).to.be(-1);
+        });
+    });
 });

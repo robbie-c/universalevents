@@ -43,6 +43,10 @@ export default class UniversalEvents {
         }
     }
 
+    _getListenersForEvent(eventName) {
+        return this._eventListeners[eventName] || [];
+    }
+
     /**
      * Listen for an event. Alias for {@link UniversalEvents#on}
      *
