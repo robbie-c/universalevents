@@ -11,7 +11,7 @@
  *
  * Events can then be raised with `emit`, optionally with arbitrary data which is passed to those listening for that event.
  */
-export default class UniversalEvents {
+class UniversalEvents {
 
     /**
      * Create a UniversalEvents object
@@ -234,3 +234,5 @@ export default class UniversalEvents {
         return this;
     }
 }
+
+module.exports = UniversalEvents;

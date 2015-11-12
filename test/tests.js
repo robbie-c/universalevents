@@ -1,5 +1,4 @@
 'use strict';
-require('babel/register');
 
 var expect = require('expect.js');
 
@@ -15,7 +14,7 @@ describe('UniversalEvents', function () {
             new UniversalEvents(['event1', 'event2']);
         });
         it('should take a set', function () {
-            new UniversalEvents(new Set('event1', 'event2'));
+            new UniversalEvents(new Set(['event1', 'event2']));
         });
     });
 
