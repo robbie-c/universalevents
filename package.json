@@ -1,6 +1,6 @@
 {
   "name": "universalevents",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -8,7 +8,8 @@
   },
   "main": "src/UniversalEvents.js",
   "scripts": {
-    "prepublish": "eslint src && mocha && gulp javascript"
+    "prepublish": "eslint src && mocha && gulp javascript",
+    "test": "mocha test"
   },
   "dependencies": {},
   "devDependencies": {
